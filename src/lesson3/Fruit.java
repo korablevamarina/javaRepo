@@ -1,5 +1,9 @@
 package lesson3;
 
-public class Fruit {
+public abstract class Fruit {
+    public float weight;
 
+    public Fruit(float weight) {
+        this.weight = weight;
+    }
 }
