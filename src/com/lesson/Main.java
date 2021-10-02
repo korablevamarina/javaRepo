@@ -1,5 +1,6 @@
 package com.lesson;
 
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -7,17 +8,22 @@ import java.nio.charset.StandardCharsets;
 
 public class Main {
     public static final String FILENAME = "data.csv";
-    public static final char DELIMITER = ';';
+    public static final String DELIMITER = ";";
 
     public static void main(String[] args) {
-        AppData data = creatData();
+        AppData data = createData();
         writeToFile(data);
+        AppData data2 = readFromFile();
+        System.out.println(getString(data2));
     }
 
-    public static AppData creatData() {
+    public static AppData createData() {
         AppData data = new AppData();
         data.setHeader(new String[]{"Value 1", "Value 2", "Value 3"});
-        data.setData(new int[][]{{100, 200, 123}, {300, 400, 500}});
+        data.setData(new int[][]{
+                {100, 200, 123},
+                {300, 400, 500}
+        });
         return data;
     }
 
@@ -30,6 +36,19 @@ public class Main {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public static AppData readFromFile() {
+        try (FileInputStream fin = new FileInputStream(FILENAME)) {
+            byte[] buf = fin.readAllBytes();
+            String str = new String(buf, StandardCharsets.UTF_8);
+            return new AppData(str, DELIMITER);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     private static String getString(AppData data) {
